@@ -1,9 +1,8 @@
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.models import Model
-import visualkeras
 
-_input = Input((224,224,1)) 
+_input = Input((224,224,3)) 
 
 conv1  = Conv2D(filters=64, kernel_size=(3,3), padding="same", activation="relu")(_input)
 conv2  = Conv2D(filters=64, kernel_size=(3,3), padding="same", activation="relu")(conv1)
@@ -34,6 +33,4 @@ dense2 = Dense(4096, activation="relu")(dense1)
 output = Dense(1000, activation="softmax")(dense2)
 
 vgg16_model  = Model(inputs=_input, outputs=output)
-
 vgg16_model.summary()
-visualkeras.layered_view(vgg16_model)

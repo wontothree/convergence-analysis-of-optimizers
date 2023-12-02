@@ -5,11 +5,7 @@ from keras.layers import concatenate
 
 
 def Inception_block(input_layer, f1, f2_conv1, f2_conv3, f3_conv1, f3_conv5, f4): 
-  # Input: 
-  # - f1: number of filters of the 1x1 convolutional layer in the first path
-  # - f2_conv1, f2_conv3 are number of filters corresponding to the 1x1 and 3x3 convolutional layers in the second path
-  # - f3_conv1, f3_conv5 are the number of filters corresponding to the 1x1 and 5x5  convolutional layer in the third path
-  # - f4: number of filters of the 1x1 convolutional layer in the fourth path
+  # Input
 
   # 1st path:
   path1 = Conv2D(filters=f1, kernel_size = (1,1), padding = 'same', activation = 'relu')(input_layer)
@@ -35,19 +31,15 @@ def GoogLeNet():
   # input layer 
   input_layer = Input(shape = (224, 224, 3))
 
-  # convolutional layer: filters = 64, kernel_size = (7,7), strides = 2
+  # convolutional layer
   X = Conv2D(filters = 64, kernel_size = (7,7), strides = 2, padding = 'valid', activation = 'relu')(input_layer)
-
-  # max-pooling layer: pool_size = (3,3), strides = 2
   X = MaxPooling2D(pool_size = (3,3), strides = 2)(X)
 
-  # convolutional layer: filters = 64, strides = 1
+  # convolutional layer
   X = Conv2D(filters = 64, kernel_size = (1,1), strides = 1, padding = 'same', activation = 'relu')(X)
 
-  # convolutional layer: filters = 192, kernel_size = (3,3)
+  # convolutional layer
   X = Conv2D(filters = 192, kernel_size = (3,3), padding = 'same', activation = 'relu')(X)
-
-  # max-pooling layer: pool_size = (3,3), strides = 2
   X = MaxPooling2D(pool_size= (3,3), strides = 2)(X)
 
   # 1st Inception block
@@ -55,8 +47,6 @@ def GoogLeNet():
 
   # 2nd Inception block
   X = Inception_block(X, f1 = 128, f2_conv1 = 128, f2_conv3 = 192, f3_conv1 = 32, f3_conv5 = 96, f4 = 64)
-
-  # max-pooling layer: pool_size = (3,3), strides = 2
   X = MaxPooling2D(pool_size= (3,3), strides = 2)(X)
 
   # 3rd Inception block
@@ -90,10 +80,7 @@ def GoogLeNet():
   
   
   # 7th Inception block
-  X = Inception_block(X, f1 = 256, f2_conv1 = 160, f2_conv3 = 320, f3_conv1 = 32, 
-                      f3_conv5 = 128, f4 = 128)
-
-  # max-pooling layer: pool_size = (3,3), strides = 2
+  X = Inception_block(X, f1 = 256, f2_conv1 = 160, f2_conv3 = 320, f3_conv1 = 32, f3_conv5 = 128, f4 = 128)
   X = MaxPooling2D(pool_size = (3,3), strides = 2)(X)
 
   # 8th Inception block
@@ -116,9 +103,5 @@ def GoogLeNet():
 
   return model
 
-
-# GoogLeNet 모델 생성
 googlenet_model = GoogLeNet()
-
-# 모델의 summary 출력
 googlenet_model.summary()
