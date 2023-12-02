@@ -17,8 +17,7 @@ X_test = X_test.reshape((10000, 28 ,28, 1))
 
 # CNN model
 model = models.Sequential([
-    layers.Conv2D(32, kernel_size=(5, 5), strides=(1, 1),
-                  padding='same', activation='relu', input_shape=(28, 28, 1)),
+    layers.Conv2D(32, kernel_size=(5, 5), strides=(1, 1), padding='same', activation='relu', input_shape=(28, 28, 1)),
     layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
     layers.Conv2D(64, kernel_size=(2, 2), activation='relu', padding='same'),
     layers.MaxPooling2D(pool_size=(2, 2)),
