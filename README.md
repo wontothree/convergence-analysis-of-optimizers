@@ -45,4 +45,6 @@ Image classification Experiment
 
 ### ImageNet
 
+- 3 x 224 x 224
+
 ## CNN Models
