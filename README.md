@@ -2,8 +2,7 @@
 
 ## Empirical evaluation
 
-1. **최종 성능 (Final Performance):** 훈련이 완료된 후 모델의 최종 성능을 평가
-2. **수렴 속도 (Convergence Speed):** 각 옵티마이저가 모델을 수렴시키는 데 걸리는 시간
+Training loss, Validation accuracy
 
 Optimizer들의 수렴성을 분석하고, Convergence analysis of optimizers에 실험을 진행합니다.
 
@@ -19,7 +18,9 @@ Image classification Experiment
 
 ## Imagenet
 
-Imagenet : 224x224
+|Mnist|Cifar10|Cifar100|Imagenet|
+|---|---|---|---|
+|28x28|||224x224|
 
 *스마트폰의 해상도 : 1080x1920
 
@@ -42,3 +43,5 @@ Imagenet : 224x224
 따라서 딥러닝에서는 전역 최적화가 아닌 지역 최적화를 수행하게 되며, 이는 문제에 따라 다양한 해결 방법이 적용됩니다.
 
 non convex problem에서 최적해를 얼마나 잘 찾아가느냐가 관건이다.
+
+
