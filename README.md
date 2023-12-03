@@ -10,11 +10,11 @@ Image classification Experiment
 
 |Datasets|CNN Models|Optimizers|
 |---|---|---|
-|Mnist|AlexNet|SGD|
-|Cifar10|VggNet|Momentum|
-|Cifar100|GoogleNet|Adagrad|
-|Imagenet|ResNet|RMSProp|
-|||Adam|
+|Mnist|LeNet-5|SGD|
+|Fashion MNIST|AlexNet|SGDM|
+|Cifar10|VGGNet|Adagrad|
+|Cifar100|GoogleNet|RMSProp|
+|Imagenet|ResNet|Adam|
 
 ## Imagenet
 
