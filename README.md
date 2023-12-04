@@ -20,19 +20,19 @@ Image classification Experiment
 
 |Mnist|Cifar10|Cifar100|Imagenet|
 |---|---|---|---|
-|28x28|||224x224|
+|28x28|32x32|32x32|224x224|
 
 *스마트폰의 해상도 : 1080x1920
 
 ## CNN Architectures
 
-||AlexNet|VGGNet|GoogleNet|ResNet|
-|---|---|---|---|---|
-|Convolution layers|5|13|21|152|
-|Fully connected layers|3|3|1|3(전역 평균 풀링층)|
-|Parameter|67M|138M|5M|7000M|
-|규제 기법|Dropout|||Batch normalization|
-|특징|||Inception module, No FC layer||
+||LeNet-5|AlexNet|VGGNet|GoogleNet|ResNet|
+|---|---|---|---|---|---|
+|Convolution layers||5|13|21|152|
+|Fully connected layers||3|3|1|3(전역 평균 풀링층)|
+|Parameter||67M|138M|5M|7000M|
+|규제 기법||Dropout|||Batch normalization|
+|특징||||Inception module, No FC layer||
 
 ## 궁금한 점
 

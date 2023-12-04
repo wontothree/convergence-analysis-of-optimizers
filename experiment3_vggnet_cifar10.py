@@ -3,6 +3,9 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import datasets, layers, models
 import matplotlib.pyplot as plt
+from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.models import Model
 
 # Load CIFAR-10 dataset
 cifar10 = datasets.cifar10
@@ -11,18 +14,37 @@ cifar10 = datasets.cifar10
 # Normalize pixel values to be between 0 and 1
 X_train, X_test = X_train / 255.0, X_test / 255.0
 
-# LeNet-5 model
-model = models.Sequential()
-model.add(layers.Conv2D(6, (3, 3), activation='tanh', input_shape=(32, 32, 3)))  # Adjusted input shape
-model.add(layers.AveragePooling2D(2))
-model.add(layers.Activation('sigmoid'))
-model.add(layers.Conv2D(16, (3, 3), activation='tanh'))  # Adjusted filter size
-model.add(layers.AveragePooling2D(2))
-model.add(layers.Activation('sigmoid'))
-model.add(layers.Conv2D(120, (3, 3), activation='tanh'))  # Adjusted filter size
-model.add(layers.Flatten())
-model.add(layers.Dense(84, activation='tanh'))
-model.add(layers.Dense(10, activation='softmax'))  # Adjusted output size
+_input = Input((32, 32, 3))  # Adjusted input shape
+
+conv1  = Conv2D(filters=64, kernel_size=(3,3), padding="same", activation="relu")(_input)
+conv2  = Conv2D(filters=64, kernel_size=(3,3), padding="same", activation="relu")(conv1)
+pool1  = MaxPooling2D((2, 2))(conv2)
+
+conv3  = Conv2D(filters=128, kernel_size=(3,3), padding="same", activation="relu")(pool1)
+conv4  = Conv2D(filters=128, kernel_size=(3,3), padding="same", activation="relu")(conv3)
+pool2  = MaxPooling2D((2, 2))(conv4)
+
+conv5  = Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(pool2)
+conv6  = Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(conv5)
+conv7  = Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu")(conv6)
+pool3  = MaxPooling2D((2, 2))(conv7)
+
+conv8  = Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(pool3)
+conv9  = Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(conv8)
+conv10 = Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(conv9)
+pool4  = MaxPooling2D((2, 2))(conv10)
+
+conv11 = Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(pool4)
+conv12 = Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(conv11)
+conv13 = Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu")(conv12)
+pool5  = MaxPooling2D((2, 2))(conv13)
+
+flat   = Flatten()(pool5)
+dense1 = Dense(4096, activation="relu")(flat)
+dense2 = Dense(4096, activation="relu")(dense1)
+output = Dense(10, activation="softmax")(dense2)  # Adjusted output units for CIFAR-10
+
+model  = Model(inputs=_input, outputs=output)
 
 # List of optimizers to compare
 optimizers = ['sgd', 'sgd_momentum', 'adagrad', 'rmsprop', 'adam']
