@@ -4,9 +4,9 @@ import tensorflow as tf
 from tensorflow.keras import datasets, layers, models
 import matplotlib.pyplot as plt
 
-# Load Fashion MNIST dataset
-fashion_mnist = datasets.fashion_mnist
-(X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
+# Load MNIST dataset
+mnist = datasets.mnist
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
 
 # Normalize pixel values to be between 0 and 1
 X_train, X_test = X_train / 255.0, X_test / 255.0
@@ -15,38 +15,21 @@ X_train, X_test = X_train / 255.0, X_test / 255.0
 X_train = X_train.reshape((60000, 28, 28, 1))
 X_test = X_test.reshape((10000, 28, 28, 1))
 
-# AlexNet-like model for Fashion MNIST
+# LeNet-5 model
 model = models.Sequential()
-
-model.add(layers.Conv2D(filters=96, kernel_size=(11, 11), strides=(4, 4), activation="relu", input_shape=(28, 28, 1)))
-model.add(layers.BatchNormalization())
-model.add(layers.MaxPool2D(pool_size=(3, 3), strides=(2, 2)))
-
-model.add(layers.Conv2D(filters=256, kernel_size=(5, 5), strides=(1, 1), activation="relu", padding="same"))
-model.add(layers.BatchNormalization())
-model.add(layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
-
-model.add(layers.Conv2D(filters=384, kernel_size=(3, 3), strides=(1, 1), activation="relu", padding="same"))
-model.add(layers.BatchNormalization())
-
-model.add(layers.Conv2D(filters=384, kernel_size=(3, 3), strides=(1, 1), activation="relu", padding="same"))
-model.add(layers.BatchNormalization())
-
-model.add(layers.Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), activation="relu", padding="same"))
-model.add(layers.BatchNormalization())
-
+model.add(layers.Conv2D(6, (3, 3), activation='tanh', input_shape=(28, 28, 1)))  # Adjusted filter size
+model.add(layers.AveragePooling2D(2))
+model.add(layers.Activation('sigmoid'))
+model.add(layers.Conv2D(16, (3, 3), activation='tanh'))  # Adjusted filter size
+model.add(layers.AveragePooling2D(2))
+model.add(layers.Activation('sigmoid'))
+model.add(layers.Conv2D(120, (3, 3), activation='tanh'))  # Adjusted filter size
 model.add(layers.Flatten())
-
-model.add(layers.Dense(4096, activation="relu"))
-model.add(layers.Dropout(0.5))
-
-model.add(layers.Dense(4096, activation="relu"))
-model.add(layers.Dropout(0.5))
-
-model.add(layers.Dense(10, activation="softmax"))
+model.add(layers.Dense(84, activation='tanh'))
+model.add(layers.Dense(10, activation='softmax'))
 
 # List of optimizers to compare
-optimizers = ['sgd', 'sgd_momentum', 'adagrad', 'rmsprop', 'adam']
+optimizers = ['SGD', 'SGDM', 'Adagrad', 'RMSProp', 'Adam']
 
 # Initialize lists to store results
 history_dict = {}
@@ -59,22 +42,22 @@ for optimizer_name in optimizers:
     tf.keras.backend.clear_session()
 
     # Create optimizer based on the optimizer_name
-    if optimizer_name == 'sgd':
+    if optimizer_name == 'SGD':
         optimizer = tf.keras.optimizers.SGD()
-    elif optimizer_name == 'sgd_momentum':
+    elif optimizer_name == 'SGDM':
         optimizer = tf.keras.optimizers.SGD(momentum=0.9)
-    elif optimizer_name == 'adagrad':
+    elif optimizer_name == 'Adagrad':
         optimizer = tf.keras.optimizers.Adagrad()
-    elif optimizer_name == 'rmsprop':
+    elif optimizer_name == 'RMSProp':
         optimizer = tf.keras.optimizers.RMSprop()
-    elif optimizer_name == 'adam':
+    elif optimizer_name == 'Adam':
         optimizer = tf.keras.optimizers.Adam()
 
     model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Train the model
     start_time = time.time()
-    history = model.fit(X_train, y_train, epochs=5, validation_data=(X_test, y_test), verbose=1)
+    history = model.fit(X_train, y_train, epochs=10, validation_data=(X_test, y_test), verbose=1)
     print(f'Optimizer: {optimizer_name}, Fit Time: {time.time() - start_time}')
 
     # Evaluate the model on the test data
@@ -91,9 +74,9 @@ plt.figure(figsize=(12, 8))
 for optimizer_name, history in history_dict.items():
     plt.plot(history['accuracy'], label=f'{optimizer_name}')
 
-plt.title('Validation Accuracy')
+plt.title('LeNet on MNIST')
 plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
+plt.ylabel('Validation Accuracy')
 plt.legend()
 plt.show()
 
@@ -102,9 +85,9 @@ plt.figure(figsize=(12, 8))
 for optimizer_name, history in history_dict.items():
     plt.plot(history['loss'], label=f'{optimizer_name}')
 
-plt.title('Validation Loss')
+plt.title('LeNet on MNIST')
 plt.xlabel('Epoch')
-plt.ylabel('Loss')
+plt.ylabel('Validation Loss')
 plt.legend()
 plt.show()
 
