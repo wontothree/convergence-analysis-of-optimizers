@@ -1,8 +1,8 @@
-% Function definition: y = x^2
-f = @(x) x.^2;
+% Function definition: y = 2x^4 - 3x^3 + 2
+f = @(x) 2*x.^4 - 3*x.^3 + 2;
 
 % Parameters
-max_iterations = 256;
+max_iterations = 512;
 initial_x = 7;
 epsilon = 1e-8;
 beta_1 = 0.9;
@@ -14,7 +14,7 @@ y_values = zeros(5, max_iterations);
 
 % Optimization process
 optimizers = {'SGD', 'SGDM', 'RMSProp', 'Adagrad', 'Adam'};
-learning_rates = [0.001, 0.001, 0.001, 0.001, 0.001]; % Specify the learning rates
+learning_rates = [0.001, 0.001, 0.01, 0.01, 0.01]; % Specify the learning rates
 
 % Create a single plot
 figure;
@@ -87,7 +87,7 @@ for opt_idx = 1:5
 end
 
 % Finalize the plot
-title('Optimizers on y = x^2');
+title('Optimizers on y = 2x^4 - 3x^3 + 2');
 xlabel('Iteration');
 ylabel('y');
 legend('Location', 'Best');

@@ -1,86 +1,93 @@
 % Function definition: y = 2x^3 - 9x^2 + 27
 f = @(x) 2*x.^3 - 9*x.^2 + 27;
 
-% Parameters (unchanged)
-learning_rate = 0.01;
-max_iterations = 64;
-initial_x = 7; 
+% Parameters
+max_iterations = 256;
+initial_x = 7;
 epsilon = 1e-8;
 beta_1 = 0.9;
 beta_2 = 0.999;
 
-% Initialization (unchanged)
+% Initialization
 x_values = zeros(5, max_iterations);
 y_values = zeros(5, max_iterations);
 
-% Optimization process (unchanged)
-optimizers = {'Gradient Descent', 'Momentum', 'RMSProp', 'Adagrad', 'Adam'};
+% Optimization process
+optimizers = {'SGD', 'SGDM', 'RMSProp', 'Adagrad', 'Adam'};
+learning_rates = [0.001, 0.001, 0.001, 0.001, 0.001]; % Specify the learning rates
 
-% Create a single plot (unchanged)
+% Create a single plot
 figure;
 
 for opt_idx = 1:5
     current_optimizer = optimizers{opt_idx};
     fprintf('Running optimization with %s...\n', current_optimizer);
-    
-    % Initialize variables based on optimizer (unchanged)
+
+    % Initialize variables based on optimizer
     switch current_optimizer
-        case 'Gradient Descent'
+        case 'SGD'
             x = initial_x;
-        case 'Momentum'
+            learning_rate = learning_rates(opt_idx);
+        case 'SGDM'
             x = initial_x;
-            momentum = 0;
-        case 'RMSProp'
-            x = initial_x;
-            cumulative_squared_gradients = 0;
+            learning_rate = learning_rates(opt_idx);
+            m = 0;
         case 'Adagrad'
             x = initial_x;
-            cumulative_squared_gradients = 0;
+            v = 0;
+            learning_rate = learning_rates(opt_idx);
+        case 'RMSProp'
+            x = initial_x;
+            v = 0;
+            learning_rate = learning_rates(opt_idx);
         case 'Adam'
             x = initial_x;
             m = 0;
             v = 0;
             t = 0;
+            learning_rate = learning_rates(opt_idx);
     end
-    
-    % Optimization loop (unchanged)
+
+    % Optimization loop
     for i = 1:max_iterations
-        gradient = 6 * x.^2 - 18 * x; % Derivative of 2x^3 - 9x^2 + 27
-        
-        % Update weights based on optimizer (unchanged)
+        gradient = 2 * x; % Derivative of x^2 is 2x
+
+        % Update weights based on optimizer
         switch current_optimizer
-            case 'Gradient Descent'
+            case 'SGD'
                 x = x - learning_rate * gradient;
-            case 'Momentum'
-                momentum = beta_1 * momentum + (1 - beta_1) * gradient;
-                x = x - learning_rate * momentum;
-            case 'RMSProp'
-                cumulative_squared_gradients = beta_2 * cumulative_squared_gradients + (1 - beta_2) * gradient.^2;
-                x = x - (learning_rate ./ (sqrt(cumulative_squared_gradients) + epsilon)) .* gradient;
+            case 'SGDM'
+                m = beta_1 * m + (1 - beta_1) * gradient;
+                x = x - learning_rate * m;
             case 'Adagrad'
-                cumulative_squared_gradients = cumulative_squared_gradients + gradient.^2;
-                x = x - (learning_rate ./ (sqrt(cumulative_squared_gradients) + epsilon)) .* gradient;
+                v = v + gradient.^2;
+                x = x - (learning_rate / (sqrt(v) + epsilon)) * gradient;
+            case 'RMSProp'
+                t = t + 1;
+                v = beta_2 * v + (1 - beta_2) * gradient.^2;
+                v_hat = v / (1 - beta_2^t);
+                x = x - (learning_rate / (sqrt(v_hat) + epsilon)) * gradient;
             case 'Adam'
                 t = t + 1;
                 m = beta_1 * m + (1 - beta_1) * gradient;
                 v = beta_2 * v + (1 - beta_2) * gradient.^2;
                 m_hat = m / (1 - beta_1^t);
                 v_hat = v / (1 - beta_2^t);
-                x = x - (learning_rate ./ (sqrt(v_hat) + epsilon)) .* m_hat;
+                x = x - (learning_rate / (sqrt(v_hat) + epsilon)) * m_hat;
         end
-        
-        % Save results (unchanged)
+
+        % Save results
         x_values(opt_idx, i) = x;
         y_values(opt_idx, i) = f(x);
     end
-    
-    % Plot results for current optimizer on the same graph (unchanged)
+
+    % Plot results for the current optimizer on the same graph
     plot(1:max_iterations, y_values(opt_idx, :), 'LineWidth', 2, 'DisplayName', current_optimizer);
     hold on;
 end
 
-% Finalize the plot (unchanged)
-title('Optimizers on y = 2x^3 - 9x^2 + 27');
+% Finalize the plot
+title('Optimizers on y = x^2');
 xlabel('Iteration');
 ylabel('y');
 legend('Location', 'Best');
