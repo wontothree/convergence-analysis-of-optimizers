@@ -33,15 +33,3 @@ Image classification Experiment
 |Parameter||67M|138M|5M|7000M|
 |규제 기법||Dropout|||Batch normalization|
 |특징||||Inception module, No FC layer||
-
-## 궁금한 점
-
-옵티마이저의 일반화 능력을 어떻게 정량적으로 평가할 수 있을까?
-
-모든 딥러닝 문제는 non convex problem이다.
-
-따라서 딥러닝에서는 전역 최적화가 아닌 지역 최적화를 수행하게 되며, 이는 문제에 따라 다양한 해결 방법이 적용됩니다.
-
-non convex problem에서 최적해를 얼마나 잘 찾아가느냐가 관건이다.
-
-
