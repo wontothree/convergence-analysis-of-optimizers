@@ -16,14 +16,6 @@ Image classification Experiment
 |Cifar100|GoogleNet|RMSProp|
 |Imagenet|ResNet|Adam|
 
-## Imagenet
-
-|Mnist|Cifar10|Cifar100|Imagenet|
-|---|---|---|---|
-|28x28|32x32|32x32|224x224|
-
-*스마트폰의 해상도 : 1080x1920
-
 ## 궁금한 점
 
 옵티마이저의 일반화 능력을 어떻게 정량적으로 평가할 수 있을까?
